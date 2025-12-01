@@ -22,7 +22,7 @@ namespace nw { namespace ut {
         static const nw::ut::internal::RuntimeTypeInfo s_TypeInfo(base::GetRuntimeTypeInfoStatic());    \
         return &s_TypeInfo;                                                                             \
     }                                                                                                   \
-    virtual const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfo() const                         \
+    virtual const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfo() const override                \
     {                                                                                                   \
         return GetRuntimeTypeInfoStatic();                                                              \
     }
