@@ -6,27 +6,30 @@
 namespace nw { namespace ut {
 
 #define NW_UT_RUNTIME_TYPEINFO_ROOT()                                           \
-    static const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfoStatic()  \
-    {                                                                           \
-        static const nw::ut::internal::RuntimeTypeInfo s_TypeInfo(NULL);        \
-        return &s_TypeInfo;                                                     \
-    }                                                                           \
+    static const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfoStatic(); \
     virtual const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfo() const \
     {                                                                           \
         return GetRuntimeTypeInfoStatic();                                      \
     }
 
 #define NW_UT_RUNTIME_TYPEINFO(base)                                                                    \
-    static const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfoStatic()                          \
-    {                                                                                                   \
-        static const nw::ut::internal::RuntimeTypeInfo s_TypeInfo(base::GetRuntimeTypeInfoStatic());    \
-        return &s_TypeInfo;                                                                             \
-    }                                                                                                   \
+    static const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfoStatic();                         \
     virtual const nw::ut::internal::RuntimeTypeInfo* GetRuntimeTypeInfo() const override                \
     {                                                                                                   \
         return GetRuntimeTypeInfoStatic();                                                              \
     }
 
+#define NW_UT_RUNTIME_TYPEINFO_ROOT_IMPL(clazz)                                     \
+    const nw::ut::internal::RuntimeTypeInfo* clazz::GetRuntimeTypeInfoStatic() {    \
+        static const nw::ut::internal::RuntimeTypeInfo s_TypeInfo(NULL);            \
+        return &s_TypeInfo;                                                         \
+    }
+
+#define NW_UT_RUNTIME_TYPEINFO_IMPL(base, clazz)                                                        \
+    const nw::ut::internal::RuntimeTypeInfo* clazz::GetRuntimeTypeInfoStatic() {                        \
+        static const nw::ut::internal::RuntimeTypeInfo s_TypeInfo(base::GetRuntimeTypeInfoStatic());    \
+        return &s_TypeInfo;                                                                             \
+    }
 
 namespace internal {
 
