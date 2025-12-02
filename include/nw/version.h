@@ -3,7 +3,7 @@
 
 #define NW_VERSION_MAJOR          1
 #define NW_VERSION_MINOR          5
-#define NW_VERSION_MICRO          0
+#define NW_VERSION_MICRO          8
 #define NW_VERSION_RELSTEP        0
 
 #ifndef NW_VERSION_NUMBER
