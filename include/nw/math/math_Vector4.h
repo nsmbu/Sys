@@ -180,8 +180,13 @@ public:
 
     void Set(f32 fx, f32 fy, f32 fz, f32 fw) { x = fx; y = fy; z = fz; w = fw; }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     bool operator == (const self_type& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
     bool operator != (const self_type& rhs) const { return x != rhs.x || y != rhs.y || z != rhs.z || w != rhs.w; }
+
+#pragma clang diagnostic pop
 
     bool IsZero() const { return VEC4IsZero(this); }
     bool IsZeroWOne() const { return VEC4IsZeroWOne(this); }

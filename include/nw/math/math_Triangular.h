@@ -41,7 +41,7 @@ inline f32 SinIdx(u32 idx)
     u32 index = (idx >> 24) & 0xff;
     u32 rest = idx & 0xffffff;
 
-    return internal::gSinCosTbl[index].sin_val + internal::gSinCosTbl[index].sin_delta * rest / 0x1000000;
+    return internal::gSinCosTbl[index].sin_val + internal::gSinCosTbl[index].sin_delta * (static_cast<float>(rest) / static_cast<float>(0x1000000));
 }
 
 inline f32 CosIdx(u32 idx)
@@ -49,7 +49,7 @@ inline f32 CosIdx(u32 idx)
     u32 index = (idx >> 24) & 0xff;
     u32 rest = idx & 0xffffff;
 
-    return internal::gSinCosTbl[index].cos_val + internal::gSinCosTbl[index].cos_delta * rest / 0x1000000;
+    return internal::gSinCosTbl[index].cos_val + internal::gSinCosTbl[index].cos_delta * (static_cast<float>(rest) / static_cast<float>(0x1000000));
 }
 
 inline void SinCosIdx(f32* pSin, f32* pCos, u32 idx)
@@ -70,6 +70,9 @@ inline f32 TanIdx(u32 idx)
 
     return (table->sin_val + table->sin_delta * rest) / (table->cos_val + table->cos_delta * rest);
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
 
 inline f32 SinRad(f32 rad)
 {
@@ -113,4 +116,5 @@ inline f32 TanDeg(f32 deg)
 
 } } // namespace nw::math
 
+#pragma clang diagnostic pop
 #endif // NW_MATH_TRIANGULAR_H_

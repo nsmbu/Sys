@@ -146,8 +146,13 @@ public:
 
     void Set(f32 fx, f32 fy) { x = fx; y = fy; }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     bool operator == (const self_type& rhs) const { return x == rhs.x && y == rhs.y; }
     bool operator != (const self_type& rhs) const { return x != rhs.x || y != rhs.y; }
+
+#pragma clang diagnostic pop
 
     bool IsZero() const { return VEC2IsZero(this); }
 };

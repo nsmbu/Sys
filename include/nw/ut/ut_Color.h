@@ -57,6 +57,8 @@ public:
     {
     }
 
+    FloatColor& operator=(const FloatColor& other) = default;
+
     ~FloatColor()
     {
     }
@@ -103,6 +105,8 @@ public:
         return color;
     }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
     const SelfType operator /(const SelfType& right) const
     {
         SelfType color(
@@ -113,6 +117,7 @@ public:
         );
         return color;
     }
+#pragma clang diagnostic pop
 
     SelfType& operator +=(const SelfType& rhs)
     {
@@ -184,10 +189,15 @@ public:
         return *this;
     }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     bool        operator ==(const SelfType& rhs) const
     {
         return (r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a);
     }
+
+#pragma clang diagnostic pop
 
     bool        operator !=(const SelfType& rhs) const
     {

@@ -128,6 +128,9 @@ MTX44PerspectivePivotDeg(MTX44* pOut, f32 fovyDeg, f32 aspect, f32 n, f32 f, Piv
     return MTX44PerspectivePivotRad(pOut, NW_MATH_DEG_TO_RAD(fovyDeg), aspect, n, f, pivot);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+
 inline MTX44*
 MTX44RotXYZRad(MTX44* pOut, f32 fRadX, f32 fRadY, f32 fRadZ)
 {
@@ -151,6 +154,8 @@ MTX44RotAxisDeg(MTX44* pOut, const VEC3* pAxis, f32 fDeg)
 {
     return MTX44RotAxisIdx(pOut, pAxis, NW_MATH_DEG_TO_IDX(fDeg));
 }
+
+#pragma clang diagnostic pop
 
 struct MTX34;
 
@@ -211,6 +216,8 @@ public:
     }
 
     MTX44(const MTX44& rhs) { (void)MTX44Copy(this, &rhs); }
+    
+    MTX44& operator=(const MTX44& other) = default;
 
     MTX44(f32 x00, f32 x01, f32 x02, f32 x03,
           f32 x10, f32 x11, f32 x12, f32 x13,
@@ -298,8 +305,8 @@ public:
     self_type& operator += (const self_type& rhs) { return *MTX44Add(this, this, &rhs); }
     self_type& operator -= (const self_type& rhs) { return *MTX44Sub(this, this, &rhs); }
 
-    self_type& operator *= (f32 f) { return *MTX44Mult(this, this, f); }
-    self_type& operator /= (f32 f) { return operator*=(1.f / f); }
+    self_type& operator *= (f32 x) { return *MTX44Mult(this, this, x); }
+    self_type& operator /= (f32 x) { return operator*=(1.f / x); }
 
     self_type operator + () const { return *this; }
     self_type operator - () const
@@ -313,8 +320,8 @@ public:
     self_type operator + (const self_type& rhs) const { MTX44 tmp; return *MTX44Add(&tmp, this, &rhs); }
     self_type operator - (const self_type& rhs) const { MTX44 tmp; return *MTX44Sub(&tmp, this, &rhs); }
 
-    self_type operator * (f32 f) const { MTX44 tmp; return *MTX44Mult(&tmp, this, f); }
-    self_type operator / (f32 f) const { return *this * (1.f / f); }
+    self_type operator * (f32 x) const { MTX44 tmp; return *MTX44Mult(&tmp, this, x); }
+    self_type operator / (f32 x) const { return *this * (1.f / x); }
 
     self_type& Transpose() { return *MTX44Transpose(this, this); }
 
@@ -352,19 +359,19 @@ public:
         return *MTX44RotAxisRad(this, &axis, theta);
     }
 
-    self_type& SetFrustum(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, PivotDirection pivot = PIVOT_NONE)
+    self_type& SetFrustum(f32 l, f32 r, f32 b, f32 t, f32 n, f32 far, PivotDirection pivot = PIVOT_NONE)
     {
-        return *MTX44FrustumPivot(this, l, r, b, t, n, f, pivot);
+        return *MTX44FrustumPivot(this, l, r, b, t, n, far, pivot);
     }
 
-    self_type& SetOrtho(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, PivotDirection pivot = PIVOT_NONE)
+    self_type& SetOrtho(f32 l, f32 r, f32 b, f32 t, f32 n, f32 far, PivotDirection pivot = PIVOT_NONE)
     {
-        return *MTX44OrthoPivot(this, l, r, b, t, n, f, pivot);
+        return *MTX44OrthoPivot(this, l, r, b, t, n, far, pivot);
     }
 
-    self_type& SetPerspective(f32 fovyRad, f32 aspect, f32 n, f32 f, PivotDirection pivot = PIVOT_NONE)
+    self_type& SetPerspective(f32 fovyRad, f32 aspect, f32 n, f32 far, PivotDirection pivot = PIVOT_NONE)
     {
-        return *MTX44PerspectivePivotRad(this, fovyRad, aspect, n, f, pivot);
+        return *MTX44PerspectivePivotRad(this, fovyRad, aspect, n, far, pivot);
     }
 
     bool operator == (const self_type& rhs) const { return ::std::memcmp(this, &rhs, sizeof(MTX44)) == 0; }
@@ -979,7 +986,7 @@ MTX44Sub(MTX44* pOut, const MTX44* p1, const MTX44* p2)
 NW_MATH_INLINE MTX44*
 MTX44Mult(MTX44* pOut, const MTX44* p, f32 f)
 {
-    return MTX44Mult(pOut, p, f);
+    return NW_MATH_IMPL_NS::MTX44Mult(pOut, p, f);
 }
 
 NW_MATH_INLINE bool
@@ -1479,12 +1486,17 @@ MTX44RotAxisRad_( MTX44* pOut, const VEC3 *pAxis, f32 fRad )
     return pOut;
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+
 NW_MATH_INLINE MTX44*
 MTX44RotAxisIdx(MTX44* pOut, const VEC3* pAxis, u32 idx)
 {
     MTX44RotAxisRad_(pOut, pAxis, NW_MATH_IDX_TO_RAD(idx));
     return pOut;
 }
+
+#pragma clang diagnostic pop
 
 NW_MATH_INLINE MTX44*
 MTX44RotXYZIdx(MTX44* pOut, u32 idxX, u32 idxY, u32 idxZ)

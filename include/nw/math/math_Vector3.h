@@ -185,8 +185,13 @@ public:
     void Set(f32 fx, f32 fy, f32 fz) { x = fx; y = fy; z = fz; }
     void Set(const self_type& value) { x = value.x; y = value.y; z = value.z; }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     bool operator == (const self_type& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
     bool operator != (const self_type& rhs) const { return x != rhs.x || y != rhs.y || z != rhs.z; }
+
+#pragma clang diagnostic pop
 
     bool IsZero() const { return VEC3IsZero(this); }
 };
@@ -545,12 +550,17 @@ VEC3SafeNormalize(VEC3* pOut, const VEC3* p, const VEC3& alt)
 {
     f32 mag = (p->x * p->x) + (p->y * p->y) + (p->z * p->z);
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     if (mag == 0 /* || mag == F_INF || isnan(mag) */)
     {
         *pOut = alt;
 
         return pOut;
     }
+
+#pragma clang diagnostic pop
 
     mag = 1.0f / ::std::sqrt(mag);
 

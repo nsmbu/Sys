@@ -13,7 +13,7 @@ template <typename CharType>
 class TagProcessorBase
 {
 public:
-    NW_UT_RUNTIME_TYPEINFO_ROOT();
+    NW_UT_RUNTIME_TYPEINFO_ROOT()
 
     typedef PrintContext<CharType> ContextType;
 

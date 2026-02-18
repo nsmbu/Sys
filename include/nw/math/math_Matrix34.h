@@ -83,6 +83,9 @@ NW_MATH_INLINE MTX34* QUATToMTX34(MTX34* pOut, const QUAT* p);
 NW_FORCE_INLINE MTX34* MTX34Copy(MTX34* pOut, const MTX34* p);
 NW_FORCE_INLINE MTX34* MTX34Mult(MTX34* pOut, const MTX34* p1, const MTX34* p2);
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
+
 inline MTX34*
 MTX34RotXYZRad(MTX34* pOut, f32 fRadX, f32 fRadY, f32 fRadZ)
 {
@@ -154,6 +157,8 @@ public:
 
     MTX34(const MTX34& rhs) { (void)MTX34Copy(this, &rhs); }
 
+    MTX34& operator=(const MTX34& other) = default;
+
     MTX34(f32 x00, f32 x01, f32 x02, f32 x03,
           f32 x10, f32 x11, f32 x12, f32 x13,
           f32 x20, f32 x21, f32 x22, f32 x23)
@@ -223,8 +228,8 @@ public:
     self_type& operator += (const self_type& rhs) { return *MTX34Add(this, this, &rhs); }
     self_type& operator -= (const self_type& rhs) { return *MTX34Sub(this, this, &rhs); }
 
-    self_type& operator *= (f32 f) { return *MTX34Mult(this, this, f); }
-    self_type& operator /= (f32 f) { return operator*=(1.f / f); }
+    self_type& operator *= (f32 x) { return *MTX34Mult(this, this, x); }
+    self_type& operator /= (f32 x) { return operator*=(1.f / x); }
 
     self_type operator + () const { return *this; }
     self_type operator - () const
@@ -237,8 +242,8 @@ public:
     self_type operator + (const self_type& rhs) const { MTX34 tmp; return *MTX34Add(&tmp, this, &rhs); }
     self_type operator - (const self_type& rhs) const { MTX34 tmp; return *MTX34Sub(&tmp, this, &rhs); }
 
-    self_type operator * (f32 f) const { MTX34 tmp; return *MTX34Mult(&tmp, this, f); }
-    self_type operator / (f32 f) const { return *this * (1.f / f); }
+    self_type operator * (f32 x) const { MTX34 tmp; return *MTX34Mult(&tmp, this, x); }
+    self_type operator / (f32 x) const { return *this * (1.f / x); }
 
     self_type& Transpose() { return *MTX34Transpose(this, this); }
 
@@ -371,7 +376,7 @@ inline MTX34* MTX34Mult(MTX34* pOut, const MTX34& m1, const MTX34& m2) { return 
 inline MTX34* MTX34MAdd(MTX34* pOut, f32 t, const MTX34& m1, const MTX34& m2) { return MTX34MAdd( pOut, t, &m1, &m2 ); }
 
 inline MTX34* MTX34Copy(MTX34* pOut, const MTX34& m) { return MTX34Copy( pOut, &m ); }
-inline MTX34* MTX34MultArray(MTX34* pOut, const MTX34& m1, const MTX34* pSrc, s32 count) { return MTX34MultArray( pOut, m1, pSrc, count ); }
+inline MTX34* MTX34MultArray(MTX34* pOut, const MTX34& m1, const MTX34* pSrc, s32 count) { return MTX34MultArray( pOut, &m1, pSrc, count ); }
 inline u32    MTX34Inverse(MTX34* pOut, const MTX34& m) { return MTX34Inverse( pOut, &m ); }
 inline MTX34* MTX34Transpose(MTX34* pOut, const MTX34& m) { return MTX34Transpose( pOut, &m ); }
 inline u32    MTX34InvTranspose(MTX34* pOut, const MTX34& m) { return MTX34InvTranspose( pOut, &m ); }
@@ -2059,6 +2064,8 @@ QUATToMTX34(MTX34* pOut, const QUAT* pQ)
 }
 
 } } // namespace nw::math
+
+#pragma clang diagnostic pop
 
 #endif
 

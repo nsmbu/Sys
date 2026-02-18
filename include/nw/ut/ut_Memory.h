@@ -8,7 +8,7 @@ namespace nw { namespace ut {
 class IAllocator
 {
 public:
-    NW_UT_RUNTIME_TYPEINFO_ROOT();
+    NW_UT_RUNTIME_TYPEINFO_ROOT()
 
     virtual ~IAllocator()
     {

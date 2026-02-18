@@ -122,8 +122,13 @@ public:
     self_type operator * (f32 f) const { QUAT tmp; (void)QUATScale(&tmp, this, f); return tmp; }
     self_type operator / (f32 f) const { return operator*(1.f / f); }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
     bool operator == (const self_type& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
     bool operator != (const self_type& rhs) const { return x != rhs.x || y != rhs.y || z != rhs.z || w != rhs.w; }
+
+#pragma clang diagnostic pop
 };
 
 typedef struct QUAT Quaternion;
