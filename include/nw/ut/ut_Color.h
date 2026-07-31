@@ -5,6 +5,37 @@
 
 namespace nw { namespace ut {
 
+// TODO
+struct Color4u8
+{
+public:
+    typedef Color4u8 SelfType;
+
+    Color4u8()
+        : r(0)
+        , g(0)
+        , b(0)
+        , a(1)
+    {
+    }
+
+    Color4u8(u8 red, u8 green, u8 blue, u8 alpha)
+        : r(red)
+        , g(green)
+        , b(blue)
+        , a(alpha)
+    {
+    }
+
+public:
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+};
+
+typedef Color4u8 Color8;
+
 struct FloatColor
 {
 public:
